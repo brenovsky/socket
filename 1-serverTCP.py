@@ -11,16 +11,21 @@ orig = (meuHost, minhaPorta)
 sockobj.bind(orig)
 sockobj.listen(1)
 
-while True:
-    conn, cliente = sockobj.accept()
-    print('Conectado por:', cliente)
+print(f"Iniciando servidor...\nAberto na porta {minhaPorta}")
 
-    while True:
-        recvMsg = conn.recv(1024)
-        if recvMsg == b'\x18' or not recvMsg:   # interrompe quando receber ctrl-X (em bytes)
-            break
-        print(cliente, recvMsg.decode())
-    break
+while True:
+    try:
+        conn, cliente = sockobj.accept()
+        print('Conectado por:', cliente)
+
+        while True:
+            recvMsg = conn.recv(1024)
+            if recvMsg == b'\x18' or not recvMsg:   # interrompe quando receber ctrl-X (em bytes)
+                break
+            print(cliente, recvMsg.decode())
+        break
+    except:
+        print("A conexão com o cliente não foi possível. Tente novamente.")
 
 print('Finalizando conexão do cliente', cliente)
 conn.close()
